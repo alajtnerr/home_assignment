@@ -56,19 +56,21 @@ This should be clarified with the product owner/BA before deciding whether this 
 
 ---
 
-### TC03 — Saved list persistence after logout/login and in a new (incognito) session
+### TC03 — Attempt to create a saved list with a whitespace-only name
 
 | Field | Value |
 |---|---|
-| Preconditions | User is logged in; user has an existing saved list |
-| Test Steps | 1. On the homepage, click on a random product to open its product modal.<br>2. Click "Add to Saved List".<br>3. Select the previously created saved list.<br>4. Click "Save to List".<br>5. Click the user profile icon.<br>6. Click "Log out".<br>7. Log back in with the same account.<br>8. Click the user profile icon.<br>9. Select "Your saved lists" and verify the product is still present.<br>10. Close the browser.<br>11. Open the site (https://www.aldi.us) in an incognito/private window.<br>12. Log in with the same account.<br>13. Click the user profile icon.<br>14. Select "Your saved lists" and verify the product is still present. |
-| Test Data | A random product selected from the homepage; an existing saved list |
-| Expected Result | The added product remains on the saved list both after logging out and back in, and when accessed from a brand-new (incognito) browser session — confirming the list is persisted server-side, tied to the account, rather than held in local/temporary browser state. |
+| Preconditions | User is logged in |
+| Test Steps | 1. Click the user profile icon.<br>2. Select "Your saved lists".<br>3. Click "Create new list".<br>4. In the list name field, enter only a space character (no other text).<br>5. Attempt to click the save/create button. |
+| Test Data | A single whitespace character (" ") as the list name |
+| Expected Result | The system should prevent creating a list with an invalid (whitespace-only) name, ideally with a clear validation message explaining why the action is blocked. |
 | Priority | Medium |
-| Type | Positive / state management |
+| Type | Negative |
 | Status | **Pass** — actual result matched the expected result; no bug found during execution. |
 
-**Why this matters:** state/persistence bugs (item silently lost on logout or in a fresh session) are high-impact but easy to miss if testing only checks the immediate UI response right after clicking "Add".
+**Why this matters:** input validation on user-generated names (like list titles) is a classic negative-testing target — this confirms the system doesn't allow a functionally "empty" list name to slip through.
+
+**Note:** the save button correctly stays disabled and the list cannot be created, so the core validation works as expected. However, no message is shown explaining why the button is disabled — a minor UX polish opportunity (not filed as a formal ticket here, to keep the improvement list focused on the items above).
 
 ---
 
