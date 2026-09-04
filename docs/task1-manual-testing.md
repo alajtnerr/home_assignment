@@ -1,5 +1,7 @@
 # Task 1: Manual Testing — "Add to Shopping List" Feature (ALDI US)
 
+> **Note on terminology:** on the live ALDI US site, the feature described in the assignment as "Add to Shopping List" corresponds to the site's **Saved List** feature (accessible via a product's "Add to Saved List" action and viewable under Profile → "Your saved lists"). This document uses "saved list" throughout to match the actual UI.
+
 ## Test Cases
 
 Fields used for each test case:
@@ -34,7 +36,7 @@ Fields used for each test case:
 - The saved list is meant to directly mirror/drive cart quantities (i.e. it acts as a shortcut into the cart), in which case this behavior is correct.
 - The saved list is meant to be an independent list that can later be transferred to the cart as a separate action, in which case quantity changes within the list should NOT silently affect the cart.
 
-This should be clarified with the product owner/BA before deciding whether to log this as a bug or leave it as expected behavior.
+This should be clarified with the product owner/BA before deciding whether this is expected behavior or worth reporting as a bug.
 
 ---
 
@@ -43,14 +45,14 @@ This should be clarified with the product owner/BA before deciding whether to lo
 | Field | Value |
 |---|---|
 | Preconditions | User is logged in; user has an existing saved list |
-| Test Steps | 1. On the homepage, click on a random product to open its product modal.<br>2. Click "Add to Saved List".<br>3. Select the previously created saved list.<br>4. Click "Save to List".<br>5. Click the back arrow to return to the homepage.<br>6. Select a different product on the homepage and open its product modal.<br>7. Click "Add to Saved List".<br>8. Select the same saved list.<br>9. Click "Save to List".<br>10. Click the back arrow to return to the homepage.<br>11. Click the user profile icon.<br>12. Select "Your saved lists".<br>13. Attempt to remove one of the two saved products from the list. |
+| Test Steps | 1. On the homepage, click on a random product to open its product modal.<br>2. Click "Add to Saved List".<br>3. Select the previously created saved list.<br>4. Click "Save to List".<br>5. Click the back arrow to return to the homepage.<br>6. Select a different product on the homepage and open its product modal.<br>7. Click "Add to Saved List".<br>8. Select the same saved list.<br>9. Click "Save to List".<br>10. Click the back arrow to return to the homepage.<br>11. Click the user profile icon.<br>12. Select "Your saved lists".<br>13. Click "Show all (…) items".<br>14. Click "Manage list".<br>15. Select "Remove items".<br>16. In the "Edit list" view, click the trash icon next to one of the products.<br>17. Click "Done". |
 | Test Data | Two different products selected from the homepage; an existing saved list |
-| Expected Result | The user should be able to remove a product from the saved list directly, without it affecting the cart. |
+| Expected Result | The user is able to remove a product from the saved list via "Manage list" → "Remove items", without it affecting the cart. |
 | Priority | High |
-| Type | Negative |
-| Status | **Fail** — see BUG-001 |
+| Type | Positive |
+| Status | **Pass** — actual result matched the expected result; no bug found during execution. |
 
-**Why this matters:** the ability to remove an item is a basic counterpart to adding one — a list feature that only supports adding, never removing, is incomplete from a usability standpoint and forces users into unintended workarounds (or leaves unwanted items stuck on the list permanently).
+**Why this matters:** the ability to remove an item is a basic counterpart to adding one — this confirms that removal is possible and discoverable, even though it lives behind an extra "Manage list" step rather than being available directly from the list view.
 
 ---
 
@@ -90,19 +92,23 @@ Fields used:
 | Field | Value |
 |---|---|
 | Bug ID | BUG-001 |
-| Title | No way to remove a product from a saved list |
+| Title | Saved list view does not refresh automatically after adding a product from the cart drawer's suggested items |
 | Environment | Chrome 128, Windows 11, https://www.aldi.us |
-| Preconditions | User is logged in; saved list contains at least one product |
-| Steps to Reproduce | 1. Add a product to a saved list (via a product modal → "Add to Saved List" → select list → "Save to List").<br>2. Go to the user profile → "Your saved lists".<br>3. Attempt to remove the product from the list. |
-| Expected Result | The user can remove a product from the saved list directly from the list view (or from the product modal opened via the list), without affecting the cart. |
-| Actual Result | No remove/delete option exists on the saved list view — the only trash icon present is tied to the quantity stepper on the "+ Add" control, which adjusts/removes the item from the **cart**, not the saved list. Reopening the product's modal from the saved list also offers no remove option — only "Add to cart" and "Add to Saved List" are available. |
-| Severity | Major |
-| Priority | High |
-| Attachments | screenshot_saved_list_no_delete_1.png, screenshot_saved_list_no_delete_2.png |
+| Preconditions | User is logged in; user is viewing "Your saved lists" |
+| Steps to Reproduce | 1. While on the "Your saved lists" screen, click the cart icon to open the cart drawer (slides in from the right, saved list visible underneath).<br>2. In the "Complete your cart" suggested items section, click on a suggested product to open its product modal.<br>3. In the product modal, click "Add to Saved List".<br>4. Click the back arrow to return to the cart drawer.<br>5. Click the "X" button to close the cart drawer and return to the saved list screen. |
+| Expected Result | The saved list screen updates automatically to show the newly added product, without requiring any further action from the user. |
+| Actual Result | The newly added product does not appear in the saved list view after closing the cart drawer. The product only appears after manually refreshing the browser page. |
+| Severity | Minor (no data loss — the item is actually saved server-side — but the UI gives the false impression that the add failed, which could lead the user to add the item again) |
+| Priority | Medium |
+| Attachments | screenshot_bug001_1.png, screenshot_bug001_2.png, screenshot_bug001_3.png, screenshot_bug001_4.png |
 
-![Saved list view — no delete option present](./screenshots/screenshot_saved_list_no_delete_1.png)
+![Saved list screen, before opening the cart](./screenshots/screenshot_bug001_1.png)
 
-![Product modal opened from saved list — no delete option present](./screenshots/screenshot_saved_list_no_delete_2.png)
+![Adding the suggested product to the saved list from the cart drawer](./screenshots/screenshot_bug001_2.png)
+
+![Cart drawer closed, saved list screen underneath](./screenshots/screenshot_bug001_3.png)
+
+![Saved list still missing the new product until a manual page refresh](./screenshots/screenshot_bug001_4.png)
 
 ---
 
@@ -148,7 +154,7 @@ Fields used (same shape as a Jira issue):
 
 | Field | Value |
 |---|---|
-| Issue Key | IMP-003 |
+| Issue Key | IMP-002 |
 | Issue Type | Improvement |
 | Summary | No direct way to remove a cart item when quantity is greater than 1 |
 | Environment | Chrome 128, Windows 11 (mobile cart view), https://www.aldi.us |
@@ -161,3 +167,25 @@ Fields used (same shape as a Jira issue):
 | Attachments | screenshot_cart_quantity_delete.png |
 
 ![Cart item delete requires reducing quantity first](./screenshots/screenshot_cart_quantity_delete.png)
+
+---
+
+### Sample Improvement Ticket #3
+
+| Field | Value |
+|---|---|
+| Issue Key | IMP-003 |
+| Issue Type | Improvement |
+| Summary | "Save to list" button remains active with no feedback when the product is already on the selected list |
+| Environment | Chrome 128, Windows 11, https://www.aldi.us |
+| Description | When opening "Add to Saved List" for a product that is already on a given saved list, the list's checkbox is shown pre-checked (correctly indicating the product is already saved there). However, the "Save to list" button remains fully active and clickable, and clicking it again produces no toast, message, or visual feedback of any kind — nor is the button disabled to prevent the redundant action. The underlying data is not affected (the item count on the list does not change), but the UI gives no indication of that either way, leaving the user unsure whether anything happened. |
+| Steps to Reproduce | 1. Add a product to a saved list.<br>2. Reopen the same product's modal and click "Add to Saved List" again.<br>3. Observe the list's checkbox is already checked.<br>4. Click "Save to list" again. |
+| Expected Behavior | Either the "Save to list" button is disabled for lists where the product is already saved, or clicking it shows a clear message confirming the product is already on the list (or a "Removed" / "Already saved" style toast). |
+| Actual Behavior | The button stays active and clickable; clicking it again gives no feedback message, though the list's item count correctly stays unchanged. |
+| Severity | Cosmetic / UX clarity (no data integrity issue, but leaves the user without confirmation of the outcome) |
+| Priority | Low |
+| Attachments | screenshot_imp003_1.png, screenshot_imp003_2.png |
+
+![Save to list dialog with the list already checked](./screenshots/screenshot_imp003_1.png)
+
+![Dialog after clicking "Save to list" again — no feedback shown](./screenshots/screenshot_imp003_2.png)
