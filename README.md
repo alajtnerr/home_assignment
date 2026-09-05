@@ -1,4 +1,4 @@
-# ALDI US — QA Engineer Homework Assignment
+# QA Engineer Homework Assignment
 
 This repository contains my submission for the QA Engineer homework assignment: manual test design, end-to-end frontend testing, and API testing using Playwright with JavaScript.
 
