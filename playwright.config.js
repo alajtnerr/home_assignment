@@ -33,6 +33,32 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
 
+  /*
+   * In CI, let Playwright manage starting both services itself (more
+   * robust process/port handling than a hand-rolled background+wait-on
+   * script). Locally, services are started manually (see README) — this
+   * avoided some Windows-specific flakiness with Playwright's webServer
+   * during development.
+   */
+  webServer: process.env.CI
+    ? [
+        {
+          command: 'node index.js',
+          cwd: './mock-backend',
+          url: 'http://127.0.0.1:3000',
+          reuseExistingServer: false,
+          timeout: 120 * 1000,
+        },
+        {
+          command: 'npx ng serve',
+          cwd: './mock-app',
+          url: 'http://127.0.0.1:4200',
+          reuseExistingServer: false,
+          timeout: 120 * 1000,
+        },
+      ]
+    : undefined,
+
   /* Configure projects for major browsers */
   projects: [
     {

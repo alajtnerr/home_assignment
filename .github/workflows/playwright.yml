@@ -26,21 +26,6 @@ jobs:
       working-directory: ./mock-app
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
-    - name: Start mock-backend
-      run: nohup node index.js > backend.log 2>&1 &
-      working-directory: ./mock-backend
-    - name: Start mock-app
-      run: nohup npx ng serve > frontend.log 2>&1 &
-      working-directory: ./mock-app
-    - name: Wait for services to be ready
-      run: npx wait-on http://127.0.0.1:3000 http://127.0.0.1:4200 --timeout 120000
-    - name: Show service logs on failure
-      if: failure()
-      run: |
-        echo "=== backend.log ==="
-        cat mock-backend/backend.log || echo "no backend.log found"
-        echo "=== frontend.log ==="
-        cat mock-app/frontend.log || echo "no frontend.log found"
     - name: Run Playwright tests
       run: npx playwright test
     - uses: actions/upload-artifact@v4
