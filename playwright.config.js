@@ -50,7 +50,7 @@ export default defineConfig({
           timeout: 120 * 1000,
         },
         {
-          command: 'npx ng serve',
+          command: 'npx ng serve --host 0.0.0.0',
           cwd: './mock-app',
           url: 'http://127.0.0.1:4200',
           reuseExistingServer: false,
