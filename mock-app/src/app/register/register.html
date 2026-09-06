@@ -16,8 +16,8 @@
   <button type="submit">Register</button>
 </form>
 
-@if (errorMessage) {
-<p role="alert">{{ errorMessage }}</p>
+@if (errorMessage()) {
+<p role="alert">{{ errorMessage() }}</p>
 }
 
 <p>Already have an account? <a routerLink="/login">Log in</a></p>

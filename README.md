@@ -1,4 +1,4 @@
-# ALDI US — QA Engineer Homework Assignment
+# QA Engineer Homework Assignment
 
 This repository contains my submission for the QA Engineer homework assignment: manual test design, end-to-end frontend testing, and API testing using Playwright with JavaScript.
 
@@ -28,7 +28,7 @@ home_assignment/
 
 - **Task 1 — Manual Testing:** see [`docs/task1-manual-testing.md`](./docs/task1-manual-testing.md) for the test cases and bug report for the Saved List feature.
 - **Task 2 — Frontend Testing:** Playwright E2E tests for a Login feature, covering successful login, invalid-password handling, and empty-field validation. See [`docs/task2-notes.md`](./docs/task2-notes.md) for why a purpose-built Angular app + backend were used instead of an existing public site.
-- **Task 3 — API Testing:** Playwright test suite for the Task Management API (`POST`, `GET`, `PUT`, `DELETE /tasks`).
+- **Task 3 — API Testing:** Playwright test suite for the Task Management API (`POST`, `GET`, `PUT`, `DELETE /tasks`). See [`docs/task3-notes.md`](./docs/task3-notes.md) for the endpoint overview, expected status codes, and sample response bodies.
 
 ## Setup
 
@@ -37,9 +37,9 @@ npm install
 npx playwright install
 ```
 
-### Task 2 prerequisites
+### Task 2 & 3 prerequisites
 
-The Login E2E tests target a small local Angular app + backend (see `mock-app/` and `mock-backend/`). Either run them natively, or via Docker (recommended — see below).
+The `login.spec.js` and `tasks-api.spec.js` tests target a small local Angular app + backend (see `mock-app/` and `mock-backend/`). Start both **before** running the tests — either natively or via Docker.
 
 **Native:**
 ```bash
@@ -50,11 +50,13 @@ In a separate terminal:
 cd mock-app && npm install && ng serve
 ```
 
-**Docker (recommended):**
+**Docker:**
 ```bash
 docker compose up --build
 ```
 This starts both services with a single command — see the Docker bonus answer for more detail.
+
+In CI, both services are started explicitly in the GitHub Actions workflow before the tests run (see `.github/workflows/playwright.yml`).
 
 ## Running the tests
 

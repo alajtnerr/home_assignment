@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { Auth } from '../auth';
@@ -12,7 +12,7 @@ import { Auth } from '../auth';
 export class Register {
   email = '';
   password = '';
-  errorMessage = '';
+  errorMessage = signal('');
 
   constructor(
     private auth: Auth,
@@ -20,13 +20,13 @@ export class Register {
   ) {}
 
   onSubmit(): void {
-    this.errorMessage = '';
+    this.errorMessage.set('');
     this.auth.register(this.email, this.password).subscribe({
       next: () => {
         this.router.navigate(['/login']);
       },
       error: (err) => {
-        this.errorMessage = err?.error?.error || 'Registration failed.';
+        this.errorMessage.set(err?.error?.error || 'Registration failed.');
       },
     });
   }
