@@ -9,8 +9,8 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     env:
-      BASE_URL: http://localhost:4200
-      API_BASE_URL: http://localhost:3000/api
+      BASE_URL: http://127.0.0.1:4200
+      API_BASE_URL: http://127.0.0.1:3000/api
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
@@ -33,7 +33,7 @@ jobs:
       run: nohup npx ng serve > frontend.log 2>&1 &
       working-directory: ./mock-app
     - name: Wait for services to be ready
-      run: npx wait-on http://localhost:3000 http://localhost:4200 --timeout 120000
+      run: npx wait-on http://127.0.0.1:3000 http://127.0.0.1:4200 --timeout 120000
     - name: Show service logs on failure
       if: failure()
       run: |
