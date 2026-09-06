@@ -10,6 +10,10 @@ app.use(express.json());
 // Auth (Task 2) — unchanged
 // ---------------------------------------------------------------------
 
+app.get('/', (req, res) => {
+  res.status(200).send('OK');
+});
+
 const users = new Map();
 
 app.post('/api/register', (req, res) => {
